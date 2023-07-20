@@ -1,0 +1,275 @@
+[cloudera@quickstart Desktop]$ sqoop import --connect jdbc:mysql://localhost/project --username=root --password=cloudera --table=clickdata --hive-home=/user/hive/warehouse --hive-import --hive-overwrite --hive-table=export_db.click_data ;
+Warning: /usr/lib/sqoop/../accumulo does not exist! Accumulo imports will fail.
+Please set $ACCUMULO_HOME to the root of your Accumulo installation.
+^C[cloudera@quickstart Desktop]$ sqoop import --connect jdbc:mysql://localhost/project --username=root --password=cloudera --table=clickdata --hive-home=/user/hive/wareuse --hive-import --hive-overwrite --hive-table=export_db.click_data ;
+Warning: /usr/lib/sqoop/../accumulo does not exist! Accumulo imports will fail.
+Please set $ACCUMULO_HOME to the root of your Accumulo installation.
+23/07/19 01:55:47 INFO sqoop.Sqoop: Running Sqoop version: 1.4.5-cdh5.4.2
+23/07/19 01:55:48 WARN tool.BaseSqoopTool: Setting your password on the command-line is insecure. Consider using -P instead.
+23/07/19 01:55:48 INFO tool.BaseSqoopTool: Using Hive-specific delimiters for output. You can override
+23/07/19 01:55:48 INFO tool.BaseSqoopTool: delimiters with --fields-terminated-by, etc.
+23/07/19 01:55:51 INFO manager.MySQLManager: Preparing to use a MySQL streaming resultset.
+23/07/19 01:55:52 INFO tool.CodeGenTool: Beginning code generation
+23/07/19 01:55:58 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `clickdata` AS t LIMIT 1
+23/07/19 01:55:58 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `clickdata` AS t LIMIT 1
+23/07/19 01:55:58 INFO orm.CompilationManager: HADOOP_MAPRED_HOME is /usr/lib/hadoop-mapreduce
+Note: /tmp/sqoop-cloudera/compile/a7179daf5b0b4b5a9743724621622082/clickdata.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+23/07/19 01:56:32 INFO orm.CompilationManager: Writing jar file: /tmp/sqoop-cloudera/compile/a7179daf5b0b4b5a9743724621622082/clickdata.jar
+23/07/19 01:56:33 WARN manager.MySQLManager: It looks like you are importing from mysql.
+23/07/19 01:56:33 WARN manager.MySQLManager: This transfer can be faster! Use the --direct
+23/07/19 01:56:33 WARN manager.MySQLManager: option to exercise a MySQL-specific fast path.
+23/07/19 01:56:33 INFO manager.MySQLManager: Setting zero DATETIME behavior to convertToNull (mysql)
+23/07/19 01:56:33 ERROR tool.ImportTool: Error during import: No primary key could be found for table clickdata. Please specify one with --split-by or perform a sequential import with '-m 1'.
+[cloudera@quickstart Desktop]$ sqoop import --connect jdbc:mysql://localhost/project --username=root --password=cloudera --table=clickdata --hive-home=/user/hive/warehouse --hive-import --hive-overwrite --hive-table=export_db.click_data -m 1 ;
+Warning: /usr/lib/sqoop/../accumulo does not exist! Accumulo imports will fail.
+Please set $ACCUMULO_HOME to the root of your Accumulo installation.
+23/07/19 02:01:20 INFO sqoop.Sqoop: Running Sqoop version: 1.4.5-cdh5.4.2
+23/07/19 02:01:21 WARN tool.BaseSqoopTool: Setting your password on the command-line is insecure. Consider using -P instead.
+23/07/19 02:01:21 INFO tool.BaseSqoopTool: Using Hive-specific delimiters for output. You can override
+23/07/19 02:01:21 INFO tool.BaseSqoopTool: delimiters with --fields-terminated-by, etc.
+23/07/19 02:01:23 INFO manager.MySQLManager: Preparing to use a MySQL streaming resultset.
+23/07/19 02:01:23 INFO tool.CodeGenTool: Beginning code generation
+23/07/19 02:01:28 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `clickdata` AS t LIMIT 1
+23/07/19 02:01:28 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `clickdata` AS t LIMIT 1
+23/07/19 02:01:28 INFO orm.CompilationManager: HADOOP_MAPRED_HOME is /usr/lib/hadoop-mapreduce
+Note: /tmp/sqoop-cloudera/compile/84c217ad949df59c8c5d9426f78eb0cd/clickdata.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+23/07/19 02:01:48 INFO orm.CompilationManager: Writing jar file: /tmp/sqoop-cloudera/compile/84c217ad949df59c8c5d9426f78eb0cd/clickdata.jar
+23/07/19 02:01:48 WARN manager.MySQLManager: It looks like you are importing from mysql.
+23/07/19 02:01:48 WARN manager.MySQLManager: This transfer can be faster! Use the --direct
+23/07/19 02:01:48 WARN manager.MySQLManager: option to exercise a MySQL-specific fast path.
+23/07/19 02:01:48 INFO manager.MySQLManager: Setting zero DATETIME behavior to convertToNull (mysql)
+23/07/19 02:01:48 INFO mapreduce.ImportJobBase: Beginning import of clickdata
+23/07/19 02:01:48 INFO Configuration.deprecation: mapred.job.tracker is deprecated. Instead, use mapreduce.jobtracker.address
+23/07/19 02:01:52 INFO Configuration.deprecation: mapred.jar is deprecated. Instead, use mapreduce.job.jar
+23/07/19 02:02:05 INFO Configuration.deprecation: mapred.map.tasks is deprecated. Instead, use mapreduce.job.maps
+23/07/19 02:02:06 INFO client.RMProxy: Connecting to ResourceManager at /0.0.0.0:8032
+23/07/19 02:02:38 INFO db.DBInputFormat: Using read commited transaction isolation
+23/07/19 02:02:39 INFO mapreduce.JobSubmitter: number of splits:1
+23/07/19 02:02:42 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1689744761876_0001
+23/07/19 02:02:54 INFO impl.YarnClientImpl: Submitted application application_1689744761876_0001
+23/07/19 02:02:56 INFO mapreduce.Job: The url to track the job: http://quickstart.cloudera:8088/proxy/application_1689744761876_0001/
+23/07/19 02:02:56 INFO mapreduce.Job: Running job: job_1689744761876_0001
+23/07/19 02:05:25 INFO mapreduce.Job: Job job_1689744761876_0001 running in uber mode : false
+23/07/19 02:05:25 INFO mapreduce.Job:  map 0% reduce 0%
+23/07/19 02:07:52 INFO mapreduce.Job:  map 100% reduce 0%
+23/07/19 02:08:04 INFO mapreduce.Job: Job job_1689744761876_0001 completed successfully
+23/07/19 02:08:06 INFO mapreduce.Job: Counters: 30
+	File System Counters
+		FILE: Number of bytes read=0
+		FILE: Number of bytes written=134953
+		FILE: Number of read operations=0
+		FILE: Number of large read operations=0
+		FILE: Number of write operations=0
+		HDFS: Number of bytes read=87
+		HDFS: Number of bytes written=454
+		HDFS: Number of read operations=4
+		HDFS: Number of large read operations=0
+		HDFS: Number of write operations=2
+	Job Counters 
+		Launched map tasks=1
+		Other local map tasks=1
+		Total time spent by all maps in occupied slots (ms)=139613
+		Total time spent by all reduces in occupied slots (ms)=0
+		Total time spent by all map tasks (ms)=139613
+		Total vcore-seconds taken by all map tasks=139613
+		Total megabyte-seconds taken by all map tasks=142963712
+	Map-Reduce Framework
+		Map input records=13
+		Map output records=13
+		Input split bytes=87
+		Spilled Records=0
+		Failed Shuffles=0
+		Merged Map outputs=0
+		GC time elapsed (ms)=1789
+		CPU time spent (ms)=5080
+		Physical memory (bytes) snapshot=89120768
+		Virtual memory (bytes) snapshot=1505148928
+		Total committed heap usage (bytes)=43057152
+	File Input Format Counters 
+		Bytes Read=0
+	File Output Format Counters 
+		Bytes Written=454
+23/07/19 02:08:06 INFO mapreduce.ImportJobBase: Transferred 454 bytes in 361.1227 seconds (1.2572 bytes/sec)
+23/07/19 02:08:06 INFO mapreduce.ImportJobBase: Retrieved 13 records.
+23/07/19 02:08:06 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `clickdata` AS t LIMIT 1
+23/07/19 02:08:07 WARN hive.TableDefWriter: Column timestamp had to be cast to a less precise type in Hive
+23/07/19 02:08:07 INFO hive.HiveImport: Loading uploaded data into Hive
+
+Logging initialized using configuration in jar:file:/usr/jars/hive-common-1.1.0-cdh5.4.2.jar!/hive-log4j.properties
+OK
+Time taken: 8.363 seconds
+Loading data to table export_db.click_data
+chgrp: changing ownership of 'hdfs://quickstart.cloudera:8020/user/hive/warehouse/export_db.db/click_data/part-m-00000': User does not belong to hive
+Table export_db.click_data stats: [numFiles=1, numRows=0, totalSize=454, rawDataSize=0]
+OK
+Time taken: 11.23 seconds
+[cloudera@quickstart Desktop]$ sqoop import --connect jdbc:mysql://localhost/project --username=root --password=cloudera --table=customer_data --hive-home=/user/hive/warehouse --hive-import --hive-overwrite --hive-table=export_db.customer_data -m 1 ;
+Warning: /usr/lib/sqoop/../accumulo does not exist! Accumulo imports will fail.
+Please set $ACCUMULO_HOME to the root of your Accumulo installation.
+23/07/19 02:43:40 INFO sqoop.Sqoop: Running Sqoop version: 1.4.5-cdh5.4.2
+23/07/19 02:43:40 WARN tool.BaseSqoopTool: Setting your password on the command-line is insecure. Consider using -P instead.
+23/07/19 02:43:40 INFO tool.BaseSqoopTool: Using Hive-specific delimiters for output. You can override
+23/07/19 02:43:40 INFO tool.BaseSqoopTool: delimiters with --fields-terminated-by, etc.
+23/07/19 02:43:43 INFO manager.MySQLManager: Preparing to use a MySQL streaming resultset.
+23/07/19 02:43:43 INFO tool.CodeGenTool: Beginning code generation
+23/07/19 02:43:48 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `customer_data` AS t LIMIT 1
+23/07/19 02:43:49 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `customer_data` AS t LIMIT 1
+23/07/19 02:43:49 INFO orm.CompilationManager: HADOOP_MAPRED_HOME is /usr/lib/hadoop-mapreduce
+Note: /tmp/sqoop-cloudera/compile/ea883c506063672a97f205aa774916a2/customer_data.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+23/07/19 02:44:10 INFO orm.CompilationManager: Writing jar file: /tmp/sqoop-cloudera/compile/ea883c506063672a97f205aa774916a2/customer_data.jar
+23/07/19 02:44:10 WARN manager.MySQLManager: It looks like you are importing from mysql.
+23/07/19 02:44:10 WARN manager.MySQLManager: This transfer can be faster! Use the --direct
+23/07/19 02:44:10 WARN manager.MySQLManager: option to exercise a MySQL-specific fast path.
+23/07/19 02:44:10 INFO manager.MySQLManager: Setting zero DATETIME behavior to convertToNull (mysql)
+23/07/19 02:44:11 INFO mapreduce.ImportJobBase: Beginning import of customer_data
+23/07/19 02:44:11 INFO Configuration.deprecation: mapred.job.tracker is deprecated. Instead, use mapreduce.jobtracker.address
+23/07/19 02:44:15 INFO Configuration.deprecation: mapred.jar is deprecated. Instead, use mapreduce.job.jar
+23/07/19 02:44:27 INFO Configuration.deprecation: mapred.map.tasks is deprecated. Instead, use mapreduce.job.maps
+23/07/19 02:44:29 INFO client.RMProxy: Connecting to ResourceManager at /0.0.0.0:8032
+23/07/19 02:44:54 INFO db.DBInputFormat: Using read commited transaction isolation
+23/07/19 02:44:54 INFO mapreduce.JobSubmitter: number of splits:1
+23/07/19 02:44:56 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1689744761876_0002
+23/07/19 02:45:02 INFO impl.YarnClientImpl: Submitted application application_1689744761876_0002
+23/07/19 02:45:03 INFO mapreduce.Job: The url to track the job: http://quickstart.cloudera:8088/proxy/application_1689744761876_0002/
+23/07/19 02:45:03 INFO mapreduce.Job: Running job: job_1689744761876_0002
+23/07/19 02:46:49 INFO mapreduce.Job: Job job_1689744761876_0002 running in uber mode : false
+23/07/19 02:46:49 INFO mapreduce.Job:  map 0% reduce 0%
+23/07/19 02:48:54 INFO mapreduce.Job:  map 100% reduce 0%
+23/07/19 02:49:04 INFO mapreduce.Job: Job job_1689744761876_0002 completed successfully
+23/07/19 02:49:06 INFO mapreduce.Job: Counters: 30
+	File System Counters
+		FILE: Number of bytes read=0
+		FILE: Number of bytes written=134972
+		FILE: Number of read operations=0
+		FILE: Number of large read operations=0
+		FILE: Number of write operations=0
+		HDFS: Number of bytes read=87
+		HDFS: Number of bytes written=193
+		HDFS: Number of read operations=4
+		HDFS: Number of large read operations=0
+		HDFS: Number of write operations=2
+	Job Counters 
+		Launched map tasks=1
+		Other local map tasks=1
+		Total time spent by all maps in occupied slots (ms)=125316
+		Total time spent by all reduces in occupied slots (ms)=0
+		Total time spent by all map tasks (ms)=125316
+		Total vcore-seconds taken by all map tasks=125316
+		Total megabyte-seconds taken by all map tasks=128323584
+	Map-Reduce Framework
+		Map input records=5
+		Map output records=5
+		Input split bytes=87
+		Spilled Records=0
+		Failed Shuffles=0
+		Merged Map outputs=0
+		GC time elapsed (ms)=652
+		CPU time spent (ms)=4890
+		Physical memory (bytes) snapshot=89366528
+		Virtual memory (bytes) snapshot=1504915456
+		Total committed heap usage (bytes)=43057152
+	File Input Format Counters 
+		Bytes Read=0
+	File Output Format Counters 
+		Bytes Written=193
+23/07/19 02:49:06 INFO mapreduce.ImportJobBase: Transferred 193 bytes in 278.8163 seconds (0.6922 bytes/sec)
+23/07/19 02:49:06 INFO mapreduce.ImportJobBase: Retrieved 5 records.
+23/07/19 02:49:07 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `customer_data` AS t LIMIT 1
+23/07/19 02:49:07 INFO hive.HiveImport: Loading uploaded data into Hive
+
+Logging initialized using configuration in jar:file:/usr/jars/hive-common-1.1.0-cdh5.4.2.jar!/hive-log4j.properties
+OK
+Time taken: 9.699 seconds
+Loading data to table export_db.customer_data
+chgrp: changing ownership of 'hdfs://quickstart.cloudera:8020/user/hive/warehouse/export_db.db/customer_data/part-m-00000': User does not belong to hive
+Table export_db.customer_data stats: [numFiles=1, numRows=0, totalSize=193, rawDataSize=0]
+OK
+Time taken: 9.629 seconds
+[cloudera@quickstart Desktop]$ sqoop import --connect jdbc:mysql://localhost/project --username=root --password=cloudera --table=purchase_data --hive-home=/user/hive/warehouse --hive-import --hive-overwrite --hive-table=export_db.purchase_data -m 1 ;
+Warning: /usr/lib/sqoop/../accumulo does not exist! Accumulo imports will fail.
+Please set $ACCUMULO_HOME to the root of your Accumulo installation.
+23/07/19 03:16:59 INFO sqoop.Sqoop: Running Sqoop version: 1.4.5-cdh5.4.2
+23/07/19 03:16:59 WARN tool.BaseSqoopTool: Setting your password on the command-line is insecure. Consider using -P instead.
+23/07/19 03:16:59 INFO tool.BaseSqoopTool: Using Hive-specific delimiters for output. You can override
+23/07/19 03:16:59 INFO tool.BaseSqoopTool: delimiters with --fields-terminated-by, etc.
+23/07/19 03:17:02 INFO manager.MySQLManager: Preparing to use a MySQL streaming resultset.
+23/07/19 03:17:02 INFO tool.CodeGenTool: Beginning code generation
+23/07/19 03:17:07 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `purchase_data` AS t LIMIT 1
+23/07/19 03:17:08 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `purchase_data` AS t LIMIT 1
+23/07/19 03:17:08 INFO orm.CompilationManager: HADOOP_MAPRED_HOME is /usr/lib/hadoop-mapreduce
+Note: /tmp/sqoop-cloudera/compile/98fc1f7860b58b32aaaa173267c8e3f3/purchase_data.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+23/07/19 03:17:29 INFO orm.CompilationManager: Writing jar file: /tmp/sqoop-cloudera/compile/98fc1f7860b58b32aaaa173267c8e3f3/purchase_data.jar
+23/07/19 03:17:29 WARN manager.MySQLManager: It looks like you are importing from mysql.
+23/07/19 03:17:29 WARN manager.MySQLManager: This transfer can be faster! Use the --direct
+23/07/19 03:17:29 WARN manager.MySQLManager: option to exercise a MySQL-specific fast path.
+23/07/19 03:17:29 INFO manager.MySQLManager: Setting zero DATETIME behavior to convertToNull (mysql)
+23/07/19 03:17:29 INFO mapreduce.ImportJobBase: Beginning import of purchase_data
+23/07/19 03:17:29 INFO Configuration.deprecation: mapred.job.tracker is deprecated. Instead, use mapreduce.jobtracker.address
+23/07/19 03:17:33 INFO Configuration.deprecation: mapred.jar is deprecated. Instead, use mapreduce.job.jar
+23/07/19 03:17:46 INFO Configuration.deprecation: mapred.map.tasks is deprecated. Instead, use mapreduce.job.maps
+23/07/19 03:17:47 INFO client.RMProxy: Connecting to ResourceManager at /0.0.0.0:8032
+23/07/19 03:18:11 INFO db.DBInputFormat: Using read commited transaction isolation
+23/07/19 03:18:11 INFO mapreduce.JobSubmitter: number of splits:1
+23/07/19 03:18:17 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1689744761876_0003
+23/07/19 03:18:22 INFO impl.YarnClientImpl: Submitted application application_1689744761876_0003
+23/07/19 03:18:24 INFO mapreduce.Job: The url to track the job: http://quickstart.cloudera:8088/proxy/application_1689744761876_0003/
+23/07/19 03:18:24 INFO mapreduce.Job: Running job: job_1689744761876_0003
+23/07/19 03:20:04 INFO mapreduce.Job: Job job_1689744761876_0003 running in uber mode : false
+23/07/19 03:20:04 INFO mapreduce.Job:  map 0% reduce 0%
+23/07/19 03:22:18 INFO mapreduce.Job:  map 100% reduce 0%
+23/07/19 03:22:26 INFO mapreduce.Job: Job job_1689744761876_0003 completed successfully
+23/07/19 03:22:28 INFO mapreduce.Job: Counters: 30
+	File System Counters
+		FILE: Number of bytes read=0
+		FILE: Number of bytes written=134978
+		FILE: Number of read operations=0
+		FILE: Number of large read operations=0
+		FILE: Number of write operations=0
+		HDFS: Number of bytes read=87
+		HDFS: Number of bytes written=139
+		HDFS: Number of read operations=4
+		HDFS: Number of large read operations=0
+		HDFS: Number of write operations=2
+	Job Counters 
+		Launched map tasks=1
+		Other local map tasks=1
+		Total time spent by all maps in occupied slots (ms)=132875
+		Total time spent by all reduces in occupied slots (ms)=0
+		Total time spent by all map tasks (ms)=132875
+		Total vcore-seconds taken by all map tasks=132875
+		Total megabyte-seconds taken by all map tasks=136064000
+	Map-Reduce Framework
+		Map input records=5
+		Map output records=5
+		Input split bytes=87
+		Spilled Records=0
+		Failed Shuffles=0
+		Merged Map outputs=0
+		GC time elapsed (ms)=1080
+		CPU time spent (ms)=4900
+		Physical memory (bytes) snapshot=93741056
+		Virtual memory (bytes) snapshot=1512144896
+		Total committed heap usage (bytes)=43057152
+	File Input Format Counters 
+		Bytes Read=0
+	File Output Format Counters 
+		Bytes Written=139
+23/07/19 03:22:28 INFO mapreduce.ImportJobBase: Transferred 139 bytes in 282.1412 seconds (0.4927 bytes/sec)
+23/07/19 03:22:28 INFO mapreduce.ImportJobBase: Retrieved 5 records.
+23/07/19 03:22:29 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM `purchase_data` AS t LIMIT 1
+23/07/19 03:22:29 WARN hive.TableDefWriter: Column timestamp had to be cast to a less precise type in Hive
+23/07/19 03:22:29 INFO hive.HiveImport: Loading uploaded data into Hive
+
+Logging initialized using configuration in jar:file:/usr/jars/hive-common-1.1.0-cdh5.4.2.jar!/hive-log4j.properties
+OK
+Time taken: 8.462 seconds
+Loading data to table export_db.purchase_data
+chgrp: changing ownership of 'hdfs://quickstart.cloudera:8020/user/hive/warehouse/export_db.db/purchase_data/part-m-00000': User does not belong to hive
+Table export_db.purchase_data stats: [numFiles=1, numRows=0, totalSize=139, rawDataSize=0]
+OK
+Time taken: 10.102 seconds
+[cloudera@quickstart Desktop]$ 

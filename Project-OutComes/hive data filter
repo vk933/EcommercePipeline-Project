@@ -1,0 +1,431 @@
+[cloudera@quickstart Desktop]$ cd ..
+[cloudera@quickstart ~]$ hive
+
+Logging initialized using configuration in file:/etc/hive/conf.dist/hive-log4j.properties
+WARNING: Hive CLI is deprecated and migration to Beeline is recommended.
+hive> show databases ;
+OK
+default
+Time taken: 6.804 seconds, Fetched: 1 row(s)
+hive> create database export_db ;
+OK
+Time taken: 2.516 seconds
+hive> show databases ;
+OK
+default
+export_db
+Time taken: 0.131 seconds, Fetched: 2 row(s)
+hive> use export_db ;
+OK
+Time taken: 0.496 seconds
+hive> create table click_data(userid int,timestamp datetime,page varchar(30));
+FAILED: SemanticException [Error 10099]: DATETIME type isn't supported yet. Please use DATE or TIMESTAMP instead
+hive> create table click_data(userid int,timestamp Timestamp,page varchar(30));
+OK
+Time taken: 11.275 seconds
+hive> show tables ;
+OK
+click_data
+Time taken: 0.621 seconds, Fetched: 1 row(s)
+hive> describe click_data ;
+OK
+userid              	int                 	                    
+timestamp           	timestamp           	                    
+page                	varchar(30)         	                    
+Time taken: 2.779 seconds, Fetched: 3 row(s)
+hive> select * from click_data ;
+OK
+1	2023-01-01 10:00:00	homepage
+1	2023-01-01 10:01:00	product_page
+2	2023-01-01 10:02:00	homepage
+2	2023-01-01 10:03:00	cart_page
+3	2023-01-01 10:05:00	homepage
+3	2023-01-01 10:06:00	product_page
+3	2023-01-01 10:07:00	cart_page
+4	2023-01-01 10:09:00	homepage
+4	2023-01-01 10:10:00	product_page
+4	2023-01-01 10:11:00	cart_page
+4	2023-01-01 10:12:00	checkout_page
+5	2023-01-01 10:15:00	home_page
+5	2023-01-01 10:16:00	product_page
+Time taken: 6.069 seconds, Fetched: 13 row(s)
+hive> use export_db ;
+OK
+Time taken: 0.38 seconds
+hive> create table customer_data(userid int, name varchar(30),email varchar(40)) ;
+OK
+Time taken: 0.729 seconds
+hive> show table ;
+MismatchedTokenException(-1!=103)
+	at org.antlr.runtime.BaseRecognizer.recoverFromMismatchedToken(BaseRecognizer.java:617)
+	at org.antlr.runtime.BaseRecognizer.match(BaseRecognizer.java:115)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.showStatement(HiveParser.java:20995)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.ddlStatement(HiveParser.java:2430)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.execStatement(HiveParser.java:1579)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.statement(HiveParser.java:1057)
+	at org.apache.hadoop.hive.ql.parse.ParseDriver.parse(ParseDriver.java:199)
+	at org.apache.hadoop.hive.ql.parse.ParseDriver.parse(ParseDriver.java:166)
+	at org.apache.hadoop.hive.ql.Driver.compile(Driver.java:393)
+	at org.apache.hadoop.hive.ql.Driver.compile(Driver.java:307)
+	at org.apache.hadoop.hive.ql.Driver.compileInternal(Driver.java:1110)
+	at org.apache.hadoop.hive.ql.Driver.runInternal(Driver.java:1158)
+	at org.apache.hadoop.hive.ql.Driver.run(Driver.java:1047)
+	at org.apache.hadoop.hive.ql.Driver.run(Driver.java:1037)
+	at org.apache.hadoop.hive.cli.CliDriver.processLocalCmd(CliDriver.java:207)
+	at org.apache.hadoop.hive.cli.CliDriver.processCmd(CliDriver.java:159)
+	at org.apache.hadoop.hive.cli.CliDriver.processLine(CliDriver.java:370)
+	at org.apache.hadoop.hive.cli.CliDriver.executeDriver(CliDriver.java:756)
+	at org.apache.hadoop.hive.cli.CliDriver.run(CliDriver.java:675)
+	at org.apache.hadoop.hive.cli.CliDriver.main(CliDriver.java:615)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.apache.hadoop.util.RunJar.run(RunJar.java:221)
+	at org.apache.hadoop.util.RunJar.main(RunJar.java:136)
+FAILED: ParseException line 1:11 mismatched input '<EOF>' expecting EXTENDED near 'table' in show statement
+hive> show tables ;
+OK
+click_data
+customer_data
+Time taken: 0.223 seconds, Fetched: 2 row(s)
+hive> select *from customer_data ;
+OK
+1	john Doe	john.doe@example.com
+2	Jane Smith	Jane.smith@example.com
+3	Robert Johnson	robert.johnson@example.com
+4	Lisa Brown	lisa.brown@example.com
+5	Mischael Wilson	michael.wilson@example.com
+Time taken: 0.587 seconds, Fetched: 5 row(s)
+hive> create table purchase_data(userid int,timestamp Timestamp,amount int) ;
+OK
+Time taken: 0.717 seconds
+hive> show tables ;
+OK
+click_data
+customer_data
+purchase_data
+Time taken: 0.179 seconds, Fetched: 3 row(s)
+hive> select *from purchase_data ;
+OK
+1	2023-01-01 10:05:00	100
+2	2023-01-01 10:08:00	150
+3	2023-01-01 10:09:00	200
+4	2023-01-01 10:13:00	120
+5	2023-01-01 10:17:00	80
+Time taken: 3.056 seconds, Fetched: 5 row(s)
+hive> select distinct from click_data ;
+NoViableAltException(116@[124:1: selectItem : ( ( expression ( ( ( KW_AS )? identifier ) | ( KW_AS LPAREN identifier ( COMMA identifier )* RPAREN ) )? ) -> ^( TOK_SELEXPR expression ( identifier )* ) | tableAllColumns -> ^( TOK_SELEXPR tableAllColumns ) );])
+	at org.antlr.runtime.DFA.noViableAlt(DFA.java:158)
+	at org.antlr.runtime.DFA.predict(DFA.java:116)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_SelectClauseParser.selectItem(HiveParser_SelectClauseParser.java:3049)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_SelectClauseParser.selectList(HiveParser_SelectClauseParser.java:1320)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_SelectClauseParser.selectClause(HiveParser_SelectClauseParser.java:1083)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.selectClause(HiveParser.java:44365)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.singleSelectStatement(HiveParser.java:41487)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.selectStatement(HiveParser.java:41193)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.regularBody(HiveParser.java:41130)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.queryStatementExpressionBody(HiveParser.java:40183)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.queryStatementExpression(HiveParser.java:40059)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.execStatement(HiveParser.java:1519)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.statement(HiveParser.java:1057)
+	at org.apache.hadoop.hive.ql.parse.ParseDriver.parse(ParseDriver.java:199)
+	at org.apache.hadoop.hive.ql.parse.ParseDriver.parse(ParseDriver.java:166)
+	at org.apache.hadoop.hive.ql.Driver.compile(Driver.java:393)
+	at org.apache.hadoop.hive.ql.Driver.compile(Driver.java:307)
+	at org.apache.hadoop.hive.ql.Driver.compileInternal(Driver.java:1110)
+	at org.apache.hadoop.hive.ql.Driver.runInternal(Driver.java:1158)
+	at org.apache.hadoop.hive.ql.Driver.run(Driver.java:1047)
+	at org.apache.hadoop.hive.ql.Driver.run(Driver.java:1037)
+	at org.apache.hadoop.hive.cli.CliDriver.processLocalCmd(CliDriver.java:207)
+	at org.apache.hadoop.hive.cli.CliDriver.processCmd(CliDriver.java:159)
+	at org.apache.hadoop.hive.cli.CliDriver.processLine(CliDriver.java:370)
+	at org.apache.hadoop.hive.cli.CliDriver.executeDriver(CliDriver.java:756)
+	at org.apache.hadoop.hive.cli.CliDriver.run(CliDriver.java:675)
+	at org.apache.hadoop.hive.cli.CliDriver.main(CliDriver.java:615)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.apache.hadoop.util.RunJar.run(RunJar.java:221)
+	at org.apache.hadoop.util.RunJar.main(RunJar.java:136)
+FAILED: ParseException line 1:16 cannot recognize input near 'from' 'click_data' '<EOF>' in selection target
+hive> select distinct *from click_data ;
+Query ID = cloudera_20230719042828_d8945844-eae1-4347-b834-b0a0d11e831f
+Total jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks not specified. Estimated from input data size: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Starting Job = job_1689744761876_0004, Tracking URL = http://quickstart.cloudera:8088/proxy/application_1689744761876_0004/
+Kill Command = /usr/lib/hadoop/bin/hadoop job  -kill job_1689744761876_0004
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1
+2023-07-19 04:31:59,166 Stage-1 map = 0%,  reduce = 0%
+2023-07-19 04:33:00,248 Stage-1 map = 0%,  reduce = 0%
+2023-07-19 04:34:00,911 Stage-1 map = 0%,  reduce = 0%
+2023-07-19 04:35:01,821 Stage-1 map = 0%,  reduce = 0%
+2023-07-19 04:36:00,482 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 8.84 sec
+2023-07-19 04:37:01,061 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 8.84 sec
+2023-07-19 04:38:02,501 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 8.84 sec
+2023-07-19 04:38:54,188 Stage-1 map = 100%,  reduce = 67%, Cumulative CPU 11.04 sec
+2023-07-19 04:39:17,600 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 16.39 sec
+MapReduce Total cumulative CPU time: 16 seconds 390 msec
+Ended Job = job_1689744761876_0004
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 16.82 sec   HDFS Read: 7482 HDFS Write: 428 SUCCESS
+Total MapReduce CPU Time Spent: 16 seconds 820 msec
+OK
+1	2023-01-01 10:00:00	homepage
+1	2023-01-01 10:01:00	product_page
+2	2023-01-01 10:02:00	homepage
+2	2023-01-01 10:03:00	cart_page
+3	2023-01-01 10:05:00	homepage
+3	2023-01-01 10:06:00	product_page
+3	2023-01-01 10:07:00	cart_page
+4	2023-01-01 10:09:00	homepage
+4	2023-01-01 10:10:00	product_page
+4	2023-01-01 10:11:00	cart_page
+4	2023-01-01 10:12:00	checkout_page
+5	2023-01-01 10:15:00	home_page
+5	2023-01-01 10:16:00	product_page
+Time taken: 645.573 seconds, Fetched: 13 row(s)
+hive> select distinct(id) *from click_data ;
+NoViableAltException(116@[269:1: atomExpression : ( KW_NULL -> TOK_NULL | constant | castExpression | caseExpression | whenExpression | ( functionName LPAREN )=> function | tableOrColumn | LPAREN ! expression RPAREN !);])
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser$DFA32.specialStateTransition(HiveParser_IdentifiersParser.java:15155)
+	at org.antlr.runtime.DFA.predict(DFA.java:80)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.atomExpression(HiveParser_IdentifiersParser.java:6435)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.precedenceFieldExpression(HiveParser_IdentifiersParser.java:6641)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.precedenceUnaryPrefixExpression(HiveParser_IdentifiersParser.java:7026)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.precedenceUnarySuffixExpression(HiveParser_IdentifiersParser.java:7086)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.precedenceBitwiseXorExpression(HiveParser_IdentifiersParser.java:7270)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.precedenceStarExpression(HiveParser_IdentifiersParser.java:7453)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.precedencePlusExpression(HiveParser_IdentifiersParser.java:7590)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.precedenceAmpersandExpression(HiveParser_IdentifiersParser.java:7750)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.precedenceBitwiseOrExpression(HiveParser_IdentifiersParser.java:7909)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.precedenceEqualExpression(HiveParser_IdentifiersParser.java:8439)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.precedenceNotExpression(HiveParser_IdentifiersParser.java:9452)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.precedenceAndExpression(HiveParser_IdentifiersParser.java:9571)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.precedenceOrExpression(HiveParser_IdentifiersParser.java:9730)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.expression(HiveParser_IdentifiersParser.java:6363)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.expression(HiveParser.java:44344)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_SelectClauseParser.selectItem(HiveParser_SelectClauseParser.java:3058)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_SelectClauseParser.selectList(HiveParser_SelectClauseParser.java:1320)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_SelectClauseParser.selectClause(HiveParser_SelectClauseParser.java:1083)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.selectClause(HiveParser.java:44365)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.singleSelectStatement(HiveParser.java:41487)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.selectStatement(HiveParser.java:41193)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.regularBody(HiveParser.java:41130)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.queryStatementExpressionBody(HiveParser.java:40183)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.queryStatementExpression(HiveParser.java:40059)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.execStatement(HiveParser.java:1519)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.statement(HiveParser.java:1057)
+	at org.apache.hadoop.hive.ql.parse.ParseDriver.parse(ParseDriver.java:199)
+	at org.apache.hadoop.hive.ql.parse.ParseDriver.parse(ParseDriver.java:166)
+	at org.apache.hadoop.hive.ql.Driver.compile(Driver.java:393)
+	at org.apache.hadoop.hive.ql.Driver.compile(Driver.java:307)
+	at org.apache.hadoop.hive.ql.Driver.compileInternal(Driver.java:1110)
+	at org.apache.hadoop.hive.ql.Driver.runInternal(Driver.java:1158)
+	at org.apache.hadoop.hive.ql.Driver.run(Driver.java:1047)
+	at org.apache.hadoop.hive.ql.Driver.run(Driver.java:1037)
+	at org.apache.hadoop.hive.cli.CliDriver.processLocalCmd(CliDriver.java:207)
+	at org.apache.hadoop.hive.cli.CliDriver.processCmd(CliDriver.java:159)
+	at org.apache.hadoop.hive.cli.CliDriver.processLine(CliDriver.java:370)
+	at org.apache.hadoop.hive.cli.CliDriver.executeDriver(CliDriver.java:756)
+	at org.apache.hadoop.hive.cli.CliDriver.run(CliDriver.java:675)
+	at org.apache.hadoop.hive.cli.CliDriver.main(CliDriver.java:615)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.apache.hadoop.util.RunJar.run(RunJar.java:221)
+	at org.apache.hadoop.util.RunJar.main(RunJar.java:136)
+FAILED: ParseException line 1:21 cannot recognize input near 'from' 'click_data' '<EOF>' in expression specification
+hive> select distinct(id) from click_data ;
+FAILED: SemanticException [Error 10004]: Line 1:16 Invalid table alias or column reference 'id': (possible column names are: userid, timestamp, page)
+hive> select distinct(userid) *from click_data ;
+NoViableAltException(116@[269:1: atomExpression : ( KW_NULL -> TOK_NULL | constant | castExpression | caseExpression | whenExpression | ( functionName LPAREN )=> function | tableOrColumn | LPAREN ! expression RPAREN !);])
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser$DFA32.specialStateTransition(HiveParser_IdentifiersParser.java:15155)
+	at org.antlr.runtime.DFA.predict(DFA.java:80)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.atomExpression(HiveParser_IdentifiersParser.java:6435)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.precedenceFieldExpression(HiveParser_IdentifiersParser.java:6641)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.precedenceUnaryPrefixExpression(HiveParser_IdentifiersParser.java:7026)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.precedenceUnarySuffixExpression(HiveParser_IdentifiersParser.java:7086)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.precedenceBitwiseXorExpression(HiveParser_IdentifiersParser.java:7270)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.precedenceStarExpression(HiveParser_IdentifiersParser.java:7453)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.precedencePlusExpression(HiveParser_IdentifiersParser.java:7590)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.precedenceAmpersandExpression(HiveParser_IdentifiersParser.java:7750)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.precedenceBitwiseOrExpression(HiveParser_IdentifiersParser.java:7909)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.precedenceEqualExpression(HiveParser_IdentifiersParser.java:8439)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.precedenceNotExpression(HiveParser_IdentifiersParser.java:9452)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.precedenceAndExpression(HiveParser_IdentifiersParser.java:9571)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.precedenceOrExpression(HiveParser_IdentifiersParser.java:9730)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_IdentifiersParser.expression(HiveParser_IdentifiersParser.java:6363)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.expression(HiveParser.java:44344)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_SelectClauseParser.selectItem(HiveParser_SelectClauseParser.java:3058)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_SelectClauseParser.selectList(HiveParser_SelectClauseParser.java:1320)
+	at org.apache.hadoop.hive.ql.parse.HiveParser_SelectClauseParser.selectClause(HiveParser_SelectClauseParser.java:1083)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.selectClause(HiveParser.java:44365)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.singleSelectStatement(HiveParser.java:41487)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.selectStatement(HiveParser.java:41193)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.regularBody(HiveParser.java:41130)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.queryStatementExpressionBody(HiveParser.java:40183)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.queryStatementExpression(HiveParser.java:40059)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.execStatement(HiveParser.java:1519)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.statement(HiveParser.java:1057)
+	at org.apache.hadoop.hive.ql.parse.ParseDriver.parse(ParseDriver.java:199)
+	at org.apache.hadoop.hive.ql.parse.ParseDriver.parse(ParseDriver.java:166)
+	at org.apache.hadoop.hive.ql.Driver.compile(Driver.java:393)
+	at org.apache.hadoop.hive.ql.Driver.compile(Driver.java:307)
+	at org.apache.hadoop.hive.ql.Driver.compileInternal(Driver.java:1110)
+	at org.apache.hadoop.hive.ql.Driver.runInternal(Driver.java:1158)
+	at org.apache.hadoop.hive.ql.Driver.run(Driver.java:1047)
+	at org.apache.hadoop.hive.ql.Driver.run(Driver.java:1037)
+	at org.apache.hadoop.hive.cli.CliDriver.processLocalCmd(CliDriver.java:207)
+	at org.apache.hadoop.hive.cli.CliDriver.processCmd(CliDriver.java:159)
+	at org.apache.hadoop.hive.cli.CliDriver.processLine(CliDriver.java:370)
+	at org.apache.hadoop.hive.cli.CliDriver.executeDriver(CliDriver.java:756)
+	at org.apache.hadoop.hive.cli.CliDriver.run(CliDriver.java:675)
+	at org.apache.hadoop.hive.cli.CliDriver.main(CliDriver.java:615)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.apache.hadoop.util.RunJar.run(RunJar.java:221)
+	at org.apache.hadoop.util.RunJar.main(RunJar.java:136)
+FAILED: ParseException line 1:25 cannot recognize input near 'from' 'click_data' '<EOF>' in expression specification
+hive> select distinct userid  from click_data ;
+Query ID = cloudera_20230719044848_79bd735f-bfce-4238-82fd-a1bc07051aed
+Total jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks not specified. Estimated from input data size: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Starting Job = job_1689744761876_0005, Tracking URL = http://quickstart.cloudera:8088/proxy/application_1689744761876_0005/
+Kill Command = /usr/lib/hadoop/bin/hadoop job  -kill job_1689744761876_0005
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1
+2023-07-19 04:51:11,970 Stage-1 map = 0%,  reduce = 0%
+2023-07-19 04:52:12,765 Stage-1 map = 0%,  reduce = 0%
+2023-07-19 04:53:27,529 Stage-1 map = 0%,  reduce = 0%
+2023-07-19 04:54:35,095 Stage-1 map = 0%,  reduce = 0%
+2023-07-19 04:54:55,802 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 12.12 sec
+2023-07-19 04:55:56,786 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 12.12 sec
+2023-07-19 04:56:20,078 Stage-1 map = 100%,  reduce = 67%, Cumulative CPU 13.61 sec
+2023-07-19 04:56:42,067 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 19.04 sec
+MapReduce Total cumulative CPU time: 19 seconds 40 msec
+Ended Job = job_1689744761876_0005
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 19.22 sec   HDFS Read: 6980 HDFS Write: 10 SUCCESS
+Total MapReduce CPU Time Spent: 19 seconds 220 msec
+OK
+1
+2
+3
+4
+5
+Time taken: 509.729 seconds, Fetched: 5 row(s)
+hive> select sum(amount) from purchase_data ;
+Query ID = cloudera_20230719050404_d9155598-7d1f-42b6-9c67-4535b0611e64
+Total jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks determined at compile time: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Starting Job = job_1689744761876_0007, Tracking URL = http://quickstart.cloudera:8088/proxy/application_1689744761876_0007/
+Kill Command = /usr/lib/hadoop/bin/hadoop job  -kill job_1689744761876_0007
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1
+2023-07-19 05:10:31,991 Stage-1 map = 0%,  reduce = 0%
+2023-07-19 05:11:34,034 Stage-1 map = 0%,  reduce = 0%
+2023-07-19 05:12:34,397 Stage-1 map = 0%,  reduce = 0%
+2023-07-19 05:13:30,802 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 5.62 sec
+2023-07-19 05:14:31,431 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 5.62 sec
+2023-07-19 05:15:06,229 Stage-1 map = 100%,  reduce = 67%, Cumulative CPU 7.27 sec
+2023-07-19 05:15:24,269 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 12.4 sec
+MapReduce Total cumulative CPU time: 12 seconds 400 msec
+Ended Job = job_1689744761876_0007
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 12.4 sec   HDFS Read: 6811 HDFS Write: 4 SUCCESS
+Total MapReduce CPU Time Spent: 12 seconds 400 msec
+OK
+650
+Time taken: 653.201 seconds, Fetched: 1 row(s)
+hive> select max(amount) from purchase_data ;
+Query ID = cloudera_20230719060000_d35b17db-82cb-4c73-b31e-bfa3caac358d
+Total jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks determined at compile time: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Starting Job = job_1689744761876_0009, Tracking URL = http://quickstart.cloudera:8088/proxy/application_1689744761876_0009/
+Kill Command = /usr/lib/hadoop/bin/hadoop job  -kill job_1689744761876_0009
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1
+2023-07-19 06:05:05,286 Stage-1 map = 0%,  reduce = 0%
+2023-07-19 06:06:05,637 Stage-1 map = 0%,  reduce = 0%
+2023-07-19 06:07:06,650 Stage-1 map = 0%,  reduce = 0%
+2023-07-19 06:08:07,256 Stage-1 map = 0%,  reduce = 0%
+2023-07-19 06:09:07,809 Stage-1 map = 0%,  reduce = 0%
+2023-07-19 06:10:08,866 Stage-1 map = 0%,  reduce = 0%
+2023-07-19 06:11:07,352 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 7.67 sec
+2023-07-19 06:12:08,292 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 7.67 sec
+2023-07-19 06:13:09,634 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 7.67 sec
+2023-07-19 06:14:11,840 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 7.67 sec
+2023-07-19 06:14:30,897 Stage-1 map = 100%,  reduce = 33%, Cumulative CPU 8.91 sec
+2023-07-19 06:14:35,361 Stage-1 map = 100%,  reduce = 67%, Cumulative CPU 9.36 sec
+2023-07-19 06:15:39,254 Stage-1 map = 100%,  reduce = 67%, Cumulative CPU 9.79 sec
+2023-07-19 06:15:49,785 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 16.92 sec
+MapReduce Total cumulative CPU time: 16 seconds 920 msec
+Ended Job = job_1689744761876_0009
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 18.1 sec   HDFS Read: 6827 HDFS Write: 4 SUCCESS
+Total MapReduce CPU Time Spent: 18 seconds 100 msec
+OK
+200
+Time taken: 925.797 seconds, Fetched: 1 row(s)
+hive> select concat (userid,' ',page) from click_data ;
+OK
+1 homepage
+1 product_page
+2 homepage
+2 cart_page
+3 homepage
+3 product_page
+3 cart_page
+4 homepage
+4 product_page
+4 cart_page
+4 checkout_page
+5 home_page
+5 product_page
+Time taken: 2.71 seconds, Fetched: 13 row(s)
+hive> select upper(page) from click_data;
+OK
+HOMEPAGE
+PRODUCT_PAGE
+HOMEPAGE
+CART_PAGE
+HOMEPAGE
+PRODUCT_PAGE
+CART_PAGE
+HOMEPAGE
+PRODUCT_PAGE
+CART_PAGE
+CHECKOUT_PAGE
+HOME_PAGE
+PRODUCT_PAGE
+Time taken: 1.001 seconds, Fetched: 13 row(s)
+hive> 

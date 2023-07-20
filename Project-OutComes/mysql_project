@@ -1,0 +1,232 @@
+[cloudera@quickstart Desktop]$ cd ..
+[cloudera@quickstart ~]$ mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 17
+Server version: 5.1.66 Source distribution
+
+Copyright (c) 2000, 2012, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database project ;
+Query OK, 1 row affected (0.15 sec)
+
+mysql> show databases ;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| cm                 |
+| firehose           |
+| hue                |
+| metastore          |
+| mysql              |
+| nav                |
+| navms              |
+| oozie              |
+| project            |
+| retail_db          |
+| rman               |
+| sentry             |
++--------------------+
+13 rows in set (0.04 sec)
+
+mysql> use project ;
+Database changed
+mysql> create table clickdata(userid int,timestamp datetime,page char) ;
+Query OK, 0 rows affected (0.12 sec)
+
+mysql> describe clickdata ;
++-----------+----------+------+-----+---------+-------+
+| Field     | Type     | Null | Key | Default | Extra |
++-----------+----------+------+-----+---------+-------+
+| userid    | int(11)  | YES  |     | NULL    |       |
+| timestamp | datetime | YES  |     | NULL    |       |
+| page      | char(1)  | YES  |     | NULL    |       |
++-----------+----------+------+-----+---------+-------+
+3 rows in set (0.12 sec)
+
+mysql> load data infile '/home/cloudera/project/clickdata' into table clickdata
+    -> fields terminated by ','
+    -> lines terminated by '\n' ;
+Query OK, 13 rows affected, 13 warnings (0.01 sec)
+Records: 13  Deleted: 0  Skipped: 0  Warnings: 13
+
+mysql> select *from clickdata ;
++--------+---------------------+------+
+| userid | timestamp           | page |
++--------+---------------------+------+
+|      1 | 2023-01-01 10:00:00 | h    |
+|      1 | 2023-01-01 10:01:00 | p    |
+|      2 | 2023-01-01 10:02:00 | h    |
+|      2 | 2023-01-01 10:03:00 | c    |
+|      3 | 2023-01-01 10:05:00 | h    |
+|      3 | 2023-01-01 10:06:00 | p    |
+|      3 | 2023-01-01 10:07:00 | c    |
+|      4 | 2023-01-01 10:09:00 | h    |
+|      4 | 2023-01-01 10:10:00 | p    |
+|      4 | 2023-01-01 10:11:00 | c    |
+|      4 | 2023-01-01 10:12:00 | c    |
+|      5 | 2023-01-01 10:15:00 | h    |
+|      5 | 2023-01-01 10:16:00 | p    |
++--------+---------------------+------+
+13 rows in set (0.00 sec)
+
+mysql> alter table clickdata modify page varchar(20) ;
+Query OK, 13 rows affected (0.11 sec)
+Records: 13  Duplicates: 0  Warnings: 0
+
+mysql> select *from clickdata ;
++--------+---------------------+------+
+| userid | timestamp           | page |
++--------+---------------------+------+
+|      1 | 2023-01-01 10:00:00 | h    |
+|      1 | 2023-01-01 10:01:00 | p    |
+|      2 | 2023-01-01 10:02:00 | h    |
+|      2 | 2023-01-01 10:03:00 | c    |
+|      3 | 2023-01-01 10:05:00 | h    |
+|      3 | 2023-01-01 10:06:00 | p    |
+|      3 | 2023-01-01 10:07:00 | c    |
+|      4 | 2023-01-01 10:09:00 | h    |
+|      4 | 2023-01-01 10:10:00 | p    |
+|      4 | 2023-01-01 10:11:00 | c    |
+|      4 | 2023-01-01 10:12:00 | c    |
+|      5 | 2023-01-01 10:15:00 | h    |
+|      5 | 2023-01-01 10:16:00 | p    |
++--------+---------------------+------+
+13 rows in set (0.01 sec)
+
+mysql> delete from clickdata ;
+Query OK, 13 rows affected (0.00 sec)
+
+mysql> select *from clickdata ;
+Empty set (0.00 sec)
+
+mysql> load data infile '/home/cloudera/project/clickdata' into table clickdata fields terminated by ',' lines terminated by '\n';
+Query OK, 13 rows affected (0.00 sec)
+Records: 13  Deleted: 0  Skipped: 0  Warnings: 0
+
+mysql> select *from clickdata ;
++--------+---------------------+---------------+
+| userid | timestamp           | page          |
++--------+---------------------+---------------+
+|      1 | 2023-01-01 10:00:00 | homepage      |
+|      1 | 2023-01-01 10:01:00 | product_page  |
+|      2 | 2023-01-01 10:02:00 | homepage      |
+|      2 | 2023-01-01 10:03:00 | cart_page     |
+|      3 | 2023-01-01 10:05:00 | homepage      |
+|      3 | 2023-01-01 10:06:00 | product_page  |
+|      3 | 2023-01-01 10:07:00 | cart_page     |
+|      4 | 2023-01-01 10:09:00 | homepage      |
+|      4 | 2023-01-01 10:10:00 | product_page  |
+|      4 | 2023-01-01 10:11:00 | cart_page     |
+|      4 | 2023-01-01 10:12:00 | checkout_page |
+|      5 | 2023-01-01 10:15:00 | home_page     |
+|      5 | 2023-01-01 10:16:00 | product_page  |
++--------+---------------------+---------------+
+13 rows in set (0.00 sec)
+
+mysql> use database project ;
+ERROR 1049 (42000): Unknown database 'database'
+mysql> use databases project ;
+ERROR 1049 (42000): Unknown database 'databases'
+mysql> use project ;
+Database changed
+mysql> show table;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> show tables ;
++-------------------+
+| Tables_in_project |
++-------------------+
+| clickdata         |
++-------------------+
+1 row in set (0.00 sec)
+
+mysql> create table customer_data(userid int,Name varchar(30),Email varchar(50)) ;
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> load data infile '/home/cloudera/project/customerdata' into table customer_data fields terminated by ',' lines terminated by '\n';
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Deleted: 0  Skipped: 0  Warnings: 0
+
+mysql> select *from customer_data
+    -> ;
++--------+-----------------+----------------------------+
+| userid | Name            | Email                      |
++--------+-----------------+----------------------------+
+|      1 | john Doe        | john.doe@example.com       |
+|      2 | Jane Smith      | Jane.smith@example.com     |
+|      3 | Robert Johnson  | robert.johnson@example.com |
+|      4 | Lisa Brown      | lisa.brown@example.com     |
+|      5 | Mischael Wilson | michael.wilson@example.com |
++--------+-----------------+----------------------------+
+5 rows in set (0.00 sec)
+
+mysql> use project ;
+Database changed
+mysql> show tables ;
++-------------------+
+| Tables_in_project |
++-------------------+
+| clickdata         |
+| customer_data     |
++-------------------+
+2 rows in set (0.00 sec)
+
+mysql> craete table purchase_data(userid int,timestamp datetime,amount int) ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'craete table purchase_data(userid int,timestamp datetime,amount int)' at line 1
+mysql> create table purchase_data(userid int,timestamp datetime,amount int) ;
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> load data infile '/home/cloudera/project/purchasedata' into table purchase_data fields terminated by ',' lines terminated by '\n';
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Deleted: 0  Skipped: 0  Warnings: 0
+
+mysql> select * from purchase_data ;
++--------+---------------------+--------+
+| userid | timestamp           | amount |
++--------+---------------------+--------+
+|      1 | 2023-01-01 10:05:00 |    100 |
+|      2 | 2023-01-01 10:08:00 |    150 |
+|      3 | 2023-01-01 10:09:00 |    200 |
+|      4 | 2023-01-01 10:13:00 |    120 |
+|      5 | 2023-01-01 10:17:00 |     80 |
++--------+---------------------+--------+
+5 rows in set (0.00 sec)
+
+mysql> describe clickdata ;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| userid    | int(11)     | YES  |     | NULL    |       |
+| timestamp | datetime    | YES  |     | NULL    |       |
+| page      | varchar(20) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.06 sec)
+
+mysql> describe customer_data ;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| userid | int(11)     | YES  |     | NULL    |       |
+| Name   | varchar(30) | YES  |     | NULL    |       |
+| Email  | varchar(50) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.03 sec)
+
+mysql> describe purchase_data ;
++-----------+----------+------+-----+---------+-------+
+| Field     | Type     | Null | Key | Default | Extra |
++-----------+----------+------+-----+---------+-------+
+| userid    | int(11)  | YES  |     | NULL    |       |
+| timestamp | datetime | YES  |     | NULL    |       |
+| amount    | int(11)  | YES  |     | NULL    |       |
++-----------+----------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> 
