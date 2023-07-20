@@ -1,0 +1,288 @@
+[cloudera@quickstart Desktop]$ hadoop fs -ls
+[cloudera@quickstart Desktop]$ mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 15
+Server version: 5.1.66 Source distribution
+
+Copyright (c) 2000, 2012, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use project ;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables;
++-------------------+
+| Tables_in_project |
++-------------------+
+| clickdata         |
+| customer_data     |
+| purchase_data     |
++-------------------+
+3 rows in set (0.00 sec)
+
+mysql> describe  clickdata  ;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| userid    | int(11)     | YES  |     | NULL    |       |
+| timestamp | datetime    | YES  |     | NULL    |       |
+| page      | varchar(20) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table clickdata add primary key(userid) ;
+ERROR 1062 (23000): Duplicate entry '1' for key 'PRIMARY'
+mysql> alter table clickdata add primary key(userid) ; 
+ERROR 1062 (23000): Duplicate entry '1' for key 'PRIMARY'
+mysql> select * from clickdata ;
++--------+---------------------+---------------+
+| userid | timestamp           | page          |
++--------+---------------------+---------------+
+|      1 | 2023-01-01 10:00:00 | homepage      |
+|      1 | 2023-01-01 10:01:00 | product_page  |
+|      2 | 2023-01-01 10:02:00 | homepage      |
+|      2 | 2023-01-01 10:03:00 | cart_page     |
+|      3 | 2023-01-01 10:05:00 | homepage      |
+|      3 | 2023-01-01 10:06:00 | product_page  |
+|      3 | 2023-01-01 10:07:00 | cart_page     |
+|      4 | 2023-01-01 10:09:00 | homepage      |
+|      4 | 2023-01-01 10:10:00 | product_page  |
+|      4 | 2023-01-01 10:11:00 | cart_page     |
+|      4 | 2023-01-01 10:12:00 | checkout_page |
+|      5 | 2023-01-01 10:15:00 | home_page     |
+|      5 | 2023-01-01 10:16:00 | product_page  |
++--------+---------------------+---------------+
+13 rows in set (0.01 sec)
+
+mysql> select * from customer_data;
++--------+-----------------+----------------------------+
+| userid | Name            | Email                      |
++--------+-----------------+----------------------------+
+|      1 | john Doe        | john.doe@example.com       |
+|      2 | Jane Smith      | Jane.smith@example.com     |
+|      3 | Robert Johnson  | robert.johnson@example.com |
+|      4 | Lisa Brown      | lisa.brown@example.com     |
+|      5 | Mischael Wilson | michael.wilson@example.com |
++--------+-----------------+----------------------------+
+5 rows in set (0.01 sec)
+
+mysql> alter table customer_data add primary key(userid) ; 
+Query OK, 5 rows affected (0.06 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> describe customer_data ;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| userid | int(11)     | NO   | PRI | 0       |       |
+| Name   | varchar(30) | YES  |     | NULL    |       |
+| Email  | varchar(50) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select *from purchase_data;
++--------+---------------------+--------+
+| userid | timestamp           | amount |
++--------+---------------------+--------+
+|      1 | 2023-01-01 10:05:00 |    100 |
+|      2 | 2023-01-01 10:08:00 |    150 |
+|      3 | 2023-01-01 10:09:00 |    200 |
+|      4 | 2023-01-01 10:13:00 |    120 |
+|      5 | 2023-01-01 10:17:00 |     80 |
++--------+---------------------+--------+
+5 rows in set (0.00 sec)
+
+mysql> alter table customer_data add foreign key (userid) references clickdata(userid) ; 
+Query OK, 5 rows affected (0.06 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> describe customer_data ;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| userid | int(11)     | NO   | PRI | 0       |       |
+| Name   | varchar(30) | YES  |     | NULL    |       |
+| Email  | varchar(50) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select *from purchase_data;+--------+---------------------+--------+
+| userid | timestamp           | amount |
++--------+---------------------+--------+
+|      1 | 2023-01-01 10:05:00 |    100 |
+|      2 | 2023-01-01 10:08:00 |    150 |
+|      3 | 2023-01-01 10:09:00 |    200 |
+|      4 | 2023-01-01 10:13:00 |    120 |
+|      5 | 2023-01-01 10:17:00 |     80 |
++--------+---------------------+--------+
+5 rows in set (0.00 sec)
+
+mysql> describe purchase_data ;
++-----------+----------+------+-----+---------+-------+
+| Field     | Type     | Null | Key | Default | Extra |
++-----------+----------+------+-----+---------+-------+
+| userid    | int(11)  | YES  |     | NULL    |       |
+| timestamp | datetime | YES  |     | NULL    |       |
+| amount    | int(11)  | YES  |     | NULL    |       |
++-----------+----------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> describe clickdata ;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| userid    | int(11)     | YES  |     | NULL    |       |
+| timestamp | datetime    | YES  |     | NULL    |       |
+| page      | varchar(20) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select *from clickdata join customer_data on customer_data.userid=clickdata.userid ;
++--------+---------------------+---------------+--------+-----------------+----------------------------+
+| userid | timestamp           | page          | userid | Name            | Email                      |
++--------+---------------------+---------------+--------+-----------------+----------------------------+
+|      1 | 2023-01-01 10:00:00 | homepage      |      1 | john Doe        | john.doe@example.com       |
+|      1 | 2023-01-01 10:01:00 | product_page  |      1 | john Doe        | john.doe@example.com       |
+|      2 | 2023-01-01 10:02:00 | homepage      |      2 | Jane Smith      | Jane.smith@example.com     |
+|      2 | 2023-01-01 10:03:00 | cart_page     |      2 | Jane Smith      | Jane.smith@example.com     |
+|      3 | 2023-01-01 10:05:00 | homepage      |      3 | Robert Johnson  | robert.johnson@example.com |
+|      3 | 2023-01-01 10:06:00 | product_page  |      3 | Robert Johnson  | robert.johnson@example.com |
+|      3 | 2023-01-01 10:07:00 | cart_page     |      3 | Robert Johnson  | robert.johnson@example.com |
+|      4 | 2023-01-01 10:09:00 | homepage      |      4 | Lisa Brown      | lisa.brown@example.com     |
+|      4 | 2023-01-01 10:10:00 | product_page  |      4 | Lisa Brown      | lisa.brown@example.com     |
+|      4 | 2023-01-01 10:11:00 | cart_page     |      4 | Lisa Brown      | lisa.brown@example.com     |
+|      4 | 2023-01-01 10:12:00 | checkout_page |      4 | Lisa Brown      | lisa.brown@example.com     |
+|      5 | 2023-01-01 10:15:00 | home_page     |      5 | Mischael Wilson | michael.wilson@example.com |
+|      5 | 2023-01-01 10:16:00 | product_page  |      5 | Mischael Wilson | michael.wilson@example.com |
++--------+---------------------+---------------+--------+-----------------+----------------------------+
+13 rows in set (0.00 sec)
+
+mysql> alter table purchase_data add foreign key (userid) references clickdata(userid) ; 
+Query OK, 5 rows affected (0.09 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select *from customer_data join purchase_data on customer_data.userid=purchase_data.userid ;
++--------+-----------------+----------------------------+--------+---------------------+--------+
+| userid | Name            | Email                      | userid | timestamp           | amount |
++--------+-----------------+----------------------------+--------+---------------------+--------+
+|      1 | john Doe        | john.doe@example.com       |      1 | 2023-01-01 10:05:00 |    100 |
+|      2 | Jane Smith      | Jane.smith@example.com     |      2 | 2023-01-01 10:08:00 |    150 |
+|      3 | Robert Johnson  | robert.johnson@example.com |      3 | 2023-01-01 10:09:00 |    200 |
+|      4 | Lisa Brown      | lisa.brown@example.com     |      4 | 2023-01-01 10:13:00 |    120 |
+|      5 | Mischael Wilson | michael.wilson@example.com |      5 | 2023-01-01 10:17:00 |     80 |
++--------+-----------------+----------------------------+--------+---------------------+--------+
+5 rows in set (0.00 sec)
+
+mysql> alter table purchase_data add foreign key (userid) references customer_data(userid) ; 
+Query OK, 5 rows affected (0.05 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from purchase_data ;
++--------+---------------------+--------+
+| userid | timestamp           | amount |
++--------+---------------------+--------+
+|      1 | 2023-01-01 10:05:00 |    100 |
+|      2 | 2023-01-01 10:08:00 |    150 |
+|      3 | 2023-01-01 10:09:00 |    200 |
+|      4 | 2023-01-01 10:13:00 |    120 |
+|      5 | 2023-01-01 10:17:00 |     80 |
++--------+---------------------+--------+
+5 rows in set (0.00 sec)
+
+mysql> describe purchase_data ;
++-----------+----------+------+-----+---------+-------+
+| Field     | Type     | Null | Key | Default | Extra |
++-----------+----------+------+-----+---------+-------+
+| userid    | int(11)  | YES  | MUL | NULL    |       |
+| timestamp | datetime | YES  |     | NULL    |       |
+| amount    | int(11)  | YES  |     | NULL    |       |
++-----------+----------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> describe customer_data ;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| userid | int(11)     | NO   | PRI | 0       |       |
+| Name   | varchar(30) | YES  |     | NULL    |       |
+| Email  | varchar(50) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table clickdata foreign key (userid) references customer_data(userid) ; 
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foreign key (userid) references customer_data(userid)' at line 1
+mysql> alter table clickdata add foreign key (userid) references customer_data(userid) ; 
+Query OK, 13 rows affected (0.06 sec)
+Records: 13  Duplicates: 0  Warnings: 0
+
+mysql> describe clickdata ;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| userid    | int(11)     | YES  | MUL | NULL    |       |
+| timestamp | datetime    | YES  |     | NULL    |       |
+| page      | varchar(20) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select *from customer_data join purchase_data on customer_data.userid=purchase_data.userid ;
++--------+-----------------+----------------------------+--------+---------------------+--------+
+| userid | Name            | Email                      | userid | timestamp           | amount |
++--------+-----------------+----------------------------+--------+---------------------+--------+
+|      1 | john Doe        | john.doe@example.com       |      1 | 2023-01-01 10:05:00 |    100 |
+|      2 | Jane Smith      | Jane.smith@example.com     |      2 | 2023-01-01 10:08:00 |    150 |
+|      3 | Robert Johnson  | robert.johnson@example.com |      3 | 2023-01-01 10:09:00 |    200 |
+|      4 | Lisa Brown      | lisa.brown@example.com     |      4 | 2023-01-01 10:13:00 |    120 |
+|      5 | Mischael Wilson | michael.wilson@example.com |      5 | 2023-01-01 10:17:00 |     80 |
++--------+-----------------+----------------------------+--------+---------------------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select *from customer_data join clickdata on customer_data.userid=clickdata.userid ;
++--------+-----------------+----------------------------+--------+---------------------+---------------+
+| userid | Name            | Email                      | userid | timestamp           | page          |
++--------+-----------------+----------------------------+--------+---------------------+---------------+
+|      1 | john Doe        | john.doe@example.com       |      1 | 2023-01-01 10:00:00 | homepage      |
+|      1 | john Doe        | john.doe@example.com       |      1 | 2023-01-01 10:01:00 | product_page  |
+|      2 | Jane Smith      | Jane.smith@example.com     |      2 | 2023-01-01 10:02:00 | homepage      |
+|      2 | Jane Smith      | Jane.smith@example.com     |      2 | 2023-01-01 10:03:00 | cart_page     |
+|      3 | Robert Johnson  | robert.johnson@example.com |      3 | 2023-01-01 10:05:00 | homepage      |
+|      3 | Robert Johnson  | robert.johnson@example.com |      3 | 2023-01-01 10:06:00 | product_page  |
+|      3 | Robert Johnson  | robert.johnson@example.com |      3 | 2023-01-01 10:07:00 | cart_page     |
+|      4 | Lisa Brown      | lisa.brown@example.com     |      4 | 2023-01-01 10:09:00 | homepage      |
+|      4 | Lisa Brown      | lisa.brown@example.com     |      4 | 2023-01-01 10:10:00 | product_page  |
+|      4 | Lisa Brown      | lisa.brown@example.com     |      4 | 2023-01-01 10:11:00 | cart_page     |
+|      4 | Lisa Brown      | lisa.brown@example.com     |      4 | 2023-01-01 10:12:00 | checkout_page |
+|      5 | Mischael Wilson | michael.wilson@example.com |      5 | 2023-01-01 10:15:00 | home_page     |
+|      5 | Mischael Wilson | michael.wilson@example.com |      5 | 2023-01-01 10:16:00 | product_page  |
++--------+-----------------+----------------------------+--------+---------------------+---------------+
+13 rows in set (0.01 sec)
+
+mysql> describe customer_data ;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| userid | int(11)     | NO   | PRI | 0       |       |
+| Name   | varchar(30) | YES  |     | NULL    |       |
+| Email  | varchar(50) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> describe purchase_data ;
++-----------+----------+------+-----+---------+-------+
+| Field     | Type     | Null | Key | Default | Extra |
++-----------+----------+------+-----+---------+-------+
+| userid    | int(11)  | YES  | MUL | NULL    |       |
+| timestamp | datetime | YES  |     | NULL    |       |
+| amount    | int(11)  | YES  |     | NULL    |       |
++-----------+----------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> 
